@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tịnh Tiến Parabol</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-color: #00796b;
+      --accent: #e53935;
+      --bg-gradient: linear-gradient(120deg, #e0f7fa 0%, #b2ebf2 40%, #fff 100%);
+      --box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+      --border-radius: 22px;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+      background: var(--bg-gradient);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      color: var(--main-color);
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin-top: 40px;
+      margin-bottom: 10px;
+      text-shadow: 1px 2px 6px #a7ffeb40;
+      font-size: 2.2rem;
+    }
+    .parabox {
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 30px 34px 20px 34px;
+      max-width: 740px;
+      margin: 0 auto 24px auto;
+      position: relative;
+      z-index: 2;
+    }
+    .controls {
+      margin: 0 auto 18px auto;
+      font-size: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-group {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .slider-label {
+      color: var(--main-color);
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 2px;
+      display: block;
+    }
+    .slider-wrapper input[type="number"] {
+      width: 70px;
+      border: none;
+      background: #e0f2f1;
+      border-radius: 10px;
+      padding: 5px 8px;
+      font-size: 1.1em;
+      color: var(--main-color);
+      text-align: center;
+      margin-bottom: 6px;
+      transition: box-shadow 0.2s;
+    }
+    .slider-wrapper input[type="number"]:focus {
+      box-shadow: 0 0 0 2px #26a69a77;
+      outline: none;
+    }
+    .slider-wrapper input[type="range"] {
+      width: 110px;
+      accent-color: var(--main-color);
+      margin: 0 0 7px 0;
+    }
+    select, button {
+      padding: 7px 16px;
+      margin: 0 6px;
+      font-size: 17px;
+      border-radius: 12px;
+      border: none;
+      background: #b2dfdb;
+      color: var(--main-color);
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 12px 0 #00695c09;
+      cursor: pointer;
+    }
+    select:focus, button:focus {
+      outline: 2px solid #26a69a;
+      background: #e0f2f1;
+    }
+    button:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .canvas-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    canvas {
+      border: 3px solid var(--main-color);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #e0f7fa 70%, #fff 100%);
+      margin: 0;
+      cursor: grab;
+      box-shadow: 0 4px 24px 0 #00968827;
+      transition: box-shadow 0.2s;
+    }
+    canvas:active {
+      cursor: grabbing;
+      box-shadow: 0 8px 22px 0 #e5393536;
+    }
+    .info {
+      margin-top: 10px;
+      font-weight: bold;
+      color: var(--main-color);
+      font-size: 1.15em;
+      letter-spacing: 0.5px;
+    }
+    .info#expanded {
+      color: var(--accent);
+      font-size: 1.12em;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .note {
+      margin-top: 36px;
+      padding: 16px 0 8px 0;
+      color: var(--main-color);
+      font-weight: 700;
+      font-size: 1.1em;
+      letter-spacing: 0.2px;
+      background: linear-gradient(90deg, #b2ebf2 60%, #fff 100%);
+      border-radius: 13px;
+      box-shadow: 0 2px 12px 0 #b2dfdb27;
+      max-width: 570px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 800px) {
+      .parabox {
+        padding: 12px 2vw 10px 2vw;
+        max-width: 98vw;
+      }
+      .canvas-wrap {
+        margin-left: 0; margin-right: 0;
+      }
+      canvas {
+        width: 98vw !important;
+        max-width: 98vw !important;
+      }
+    }
+    @media (max-width: 650px) {
+      .slider-group {
+        gap: 18px;
+      }
+      canvas {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        height: 340px !important;
+      }
+    }
+    @media (max-width: 450px) {
+      .slider-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .info, .info#expanded, .note {
+        font-size: 1em;
+      }
+      h2 {
+        font-size: 1.3em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="parabox">
+    <h2>Tịnh Tiến Parabol</h2>
+    <div class="controls">
+      <div class="slider-group">
+        <div class="slider-wrapper">
+          <span class="slider-label">a</span>
+          <input type="number" id="a" value="1" step="0.1" /><br>
+          <input type="range" id="aSlider" min="-5" max="5" step="0.1">
+        </div>
+        <div class="slider-wrapper">
+          <span class="slider-label">b</span>
+          <input type="number" id="b" value="0" step="0.1" /><br>
+          <input type="range" id="bSlider" min="-20" max="20" step="0.1">
+        </div>
+        <div class="slider-wrapper">
+          <span class="slider-label">c</span>
+          <input type="number" id="c" value="0" step="0.1" /><br>
+          <input type="range" id="cSlider" min="-20" max="20" step="0.1">
+        </div>
+      </div>
+      <div style="margin-top:3px;">
+        | Kiểu kéo:
+        <select id="mode">
+          <option value="both">Tự do</option>
+          <option value="horizontal">Chỉ ngang</option>
+          <option value="vertical">Chỉ dọc</option>
+        </select>
+        <button onclick="reset()">Vẽ lại</button>
+      </div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="600" height="400"></canvas>
+    </div>
+    <div class="info" id="original"></div>
+    <div class="info">Phương trình sau khi tịnh tiến:</div>
+    <div class="info" id="expanded"></div>
+  </div>
+  <div class="note">
+    Lưu ý: có thể rê chuột đỉnh để kéo dời Parabol trên hình.<br>
+    Bạn có thể chỉnh hệ số rồi nhấn <b>Vẽ lại</b> để làm mới.
+  </div>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const aInput = document.getElementById('a');
+    const bInput = document.getElementById('b');
+    const cInput = document.getElementById('c');
+    const aSlider = document.getElementById('aSlider');
+    const bSlider = document.getElementById('bSlider');
+    const cSlider = document.getElementById('cSlider');
+    const modeSelect = document.getElementById('mode');
+    const expanded = document.getElementById('expanded');
+    const original = document.getElementById('original');
+    let dragging = false;
+    let offsetX = 0, offsetY = 0;
+    let m = 0, n = 0;
+
+    function formatTerm(coef, variable = "", isFirst = false) {
+      coef = parseFloat(coef);
+      if (Math.abs(coef) < 1e-8) return "";
+      const absCoef = Math.abs(coef);
+      const sign = coef > 0 ? (isFirst ? "" : " + ") : " - ";
+      const value = (absCoef === 1 && variable) ? "" : absCoef.toFixed(2).replace(/\.00$/, "");
+      return `${sign}${value}${variable}`;
+    }
+
+    function draw() {
+      const a = parseFloat(aInput.value);
+      const b = parseFloat(bInput.value);
+      const c0 = parseFloat(cInput.value);
+      const c = c0 + n;
+
+      original.innerHTML = "Phương trình ban đầu: <span style='color:#111'>" +
+        "y =" +
+        formatTerm(a, "x²", true) +
+        formatTerm(b, "x") +
+        formatTerm(c0) +
+        "</span>";
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw axes
+      ctx.save();
+      ctx.strokeStyle = '#00968899';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2);
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.moveTo(canvas.width / 2, 0);
+      ctx.lineTo(canvas.width / 2, canvas.height);
+      ctx.stroke();
+      ctx.restore();
+
+      // Grid
+      ctx.save();
+      ctx.strokeStyle = '#b2ebf299';
+      ctx.lineWidth = 1.1;
+      for (let x = -canvas.width / 2; x <= canvas.width / 2; x += 20) {
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 + x, 0);
+        ctx.lineTo(canvas.width / 2 + x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = -canvas.height / 2; y <= canvas.height / 2; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2 + y);
+        ctx.lineTo(canvas.width, canvas.height / 2 + y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Axis numbers
+      ctx.save();
+      ctx.fillStyle = '#009688';
+      ctx.font = '13px Montserrat, Segoe UI';
+      ctx.textAlign = "center";
+      for (let x = -canvas.width / 2; x <= canvas.width / 2; x += 40) {
+        if (x !== 0) ctx.fillText(x / 20, canvas.width / 2 + x, canvas.height / 2 + 20);
+      }
+      ctx.textAlign = "left";
+      for (let y = -canvas.height / 2; y <= canvas.height / 2; y += 40) {
+        if (y !== 0) ctx.fillText(-y / 20, canvas.width / 2 + 8, canvas.height / 2 + y + 4);
+      }
+      ctx.restore();
+
+      // Parabola
+      ctx.save();
+      ctx.strokeStyle = '#e53935';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      let first = true;
+      for (let x = -canvas.width / 2; x <= canvas.width / 2; x+=0.7) {
+        const mathX = x / 20;
+        const y = a * Math.pow(mathX + m, 2) + b * (mathX + m) + c;
+        const screenX = canvas.width / 2 + x;
+        const screenY = canvas.height / 2 - y * 20;
+        if (first) {
+          ctx.moveTo(screenX, screenY);
+          first = false;
+        } else {
+          ctx.lineTo(screenX, screenY);
+        }
+      }
+      ctx.shadowColor = "#e539353c";
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.restore();
+
+      // Draw vertex
+      const vertexX = -b / (2 * a) - m;
+      const vertexY = a * Math.pow(vertexX + m, 2) + b * (vertexX + m) + c;
+      const screenX = canvas.width / 2 + vertexX * 20;
+      const screenY = canvas.height / 2 - vertexY * 20;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(screenX, screenY, 8, 0, 2 * Math.PI);
+      ctx.fillStyle = "#ff7043";
+      ctx.shadowColor = "#e5393533";
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.restore();
+
+      // Expanded equation
+      const expA = a;
+      const expB = 2 * a * m + b;
+      const expC = a * m * m + b * m + c;
+
+      const mSign = m >= 0 ? ` + ${m.toFixed(2)}` : ` - ${Math.abs(m).toFixed(2)}`;
+      const intermediate = `${a}(x${mSign})²` + formatTerm(b, `(x${mSign})`) + formatTerm(c);
+      const finalForm = " = " + formatTerm(expA, "x²", true) + formatTerm(expB, "x") + formatTerm(expC);
+      expanded.innerHTML = "y = <span style='color:#e53935'>" + intermediate + "</span><span style='color:#222'>" + finalForm + "</span>";
+    }
+
+    function reset() {
+      m = 0; n = 0; draw();
+    }
+
+    function getMousePos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      const pos = getMousePos(e);
+      const a = parseFloat(aInput.value);
+      const b = parseFloat(bInput.value);
+      const c0 = parseFloat(cInput.value) + n;
+      const vertexX = -b / (2 * a) - m;
+      const vertexY = a * Math.pow(vertexX + m, 2) + b * (vertexX + m) + c0;
+      const screenX = canvas.width / 2 + vertexX * 20;
+      const screenY = canvas.height / 2 - vertexY * 20;
+      if (Math.hypot(pos.x - screenX, pos.y - screenY) < 15) {
+        dragging = true;
+        offsetX = pos.x - screenX;
+        offsetY = pos.y - screenY;
+        canvas.style.cursor = 'grabbing';
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const mode = modeSelect.value;
+      const pos = getMousePos(e);
+      const x = pos.x - offsetX;
+      const y = pos.y - offsetY;
+      const newX = (x - canvas.width / 2) / 20;
+      const newY = (canvas.height / 2 - y) / 20;
+      const a = parseFloat(aInput.value);
+      const b = parseFloat(bInput.value);
+      const oldX = -b / (2 * a);
+      const oldY = a * oldX * oldX + b * oldX + parseFloat(cInput.value);
+      if (mode === 'both') {
+        m = -(newX - oldX);
+        n = newY - oldY;
+      } else if (mode === 'horizontal') {
+        m = -(newX - oldX);
+      } else if (mode === 'vertical') {
+        n = newY - oldY;
+      }
+      draw();
+    });
+
+    canvas.addEventListener('mouseup', () => { dragging = false; canvas.style.cursor = 'grab'; });
+    canvas.addEventListener('mouseleave', () => { dragging = false; canvas.style.cursor = 'grab'; });
+
+    aSlider.addEventListener('input', () => { aInput.value = aSlider.value; draw(); });
+    aInput.addEventListener('input', () => { aSlider.value = aInput.value; draw(); });
+
+    bSlider.addEventListener('input', () => { bInput.value = bSlider.value; draw(); });
+    bInput.addEventListener('input', () => { bSlider.value = bInput.value; draw(); });
+
+    cSlider.addEventListener('input', () => { cInput.value = cSlider.value; draw(); });
+    cInput.addEventListener('input', () => { cSlider.value = cInput.value; draw(); });
+
+    draw();
+  </script>
+</body>
+</html>
